@@ -510,6 +510,60 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Helper function to create share text for an activity
+  function createShareText(name, details) {
+    const formattedSchedule = formatSchedule(details);
+    return `Check out ${name} at Mergington High School! ${details.description} - ${formattedSchedule}`;
+  }
+
+  // Function to create share buttons for an activity
+  function createShareButtons(name, details) {
+    return `
+      <div class="share-buttons">
+        <button class="share-btn" data-platform="twitter" title="Share on Twitter" aria-label="Share on Twitter">
+          <span class="share-icon">🐦</span>
+        </button>
+        <button class="share-btn" data-platform="facebook" title="Share on Facebook" aria-label="Share on Facebook">
+          <span class="share-icon">📘</span>
+        </button>
+        <button class="share-btn" data-platform="email" title="Share via Email" aria-label="Share via Email">
+          <span class="share-icon">✉️</span>
+        </button>
+      </div>
+    `;
+  }
+
+  // Function to handle social sharing
+  function shareActivity(platform, activityName, details) {
+    const shareText = createShareText(activityName, details);
+    const shareUrl = window.location.href;
+    
+    let url;
+    
+    switch(platform) {
+      case 'twitter':
+        url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+        window.open(url, '_blank', 'width=600,height=400');
+        break;
+      
+      case 'facebook':
+        url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`;
+        window.open(url, '_blank', 'width=600,height=400');
+        break;
+      
+      case 'email':
+        const subject = `Check out ${activityName} at Mergington High School`;
+        const body = `${shareText}\n\nLearn more: ${shareUrl}`;
+        url = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        window.location.href = url;
+        break;
+      
+      default:
+        console.error(`Unknown sharing platform: ${platform}`);
+        return;
+    }
+  }
+
   // Function to render a single activity card
   function renderActivityCard(name, details) {
     const activityCard = document.createElement("div");
@@ -557,6 +611,9 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `;
 
+    // Create share buttons
+    const shareButtonsHtml = createShareButtons(name, details);
+
     activityCard.innerHTML = `
       ${tagHtml}
       <h4>${name}</h4>
@@ -566,6 +623,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <span class="tooltip-text">Regular meetings at this time throughout the semester</span>
       </p>
       ${capacityIndicator}
+      ${shareButtonsHtml}
       <div class="participants-list">
         <h5>Current Participants:</h5>
         <ul>
@@ -624,6 +682,16 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
     }
+
+    // Add click handlers for share buttons
+    const shareButtons = activityCard.querySelectorAll(".share-btn");
+    shareButtons.forEach((button) => {
+      button.addEventListener("click", (e) => {
+        e.preventDefault();
+        const platform = button.dataset.platform;
+        shareActivity(platform, name, details);
+      });
+    });
 
     activitiesList.appendChild(activityCard);
   }

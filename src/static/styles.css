@@ -272,6 +272,52 @@ section h3 {
   background-color: var(--success);
 }
 
+/* Share buttons */
+.share-buttons {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin: 8px 0;
+  padding: 6px 0;
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.share-btn {
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  font-size: 1rem;
+}
+
+.share-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.share-btn[data-platform="twitter"]:hover {
+  background-color: #1da1f2;
+  border-color: #1da1f2;
+}
+
+.share-btn[data-platform="facebook"]:hover {
+  background-color: #4267B2;
+  border-color: #4267B2;
+}
+
+.share-btn[data-platform="email"]:hover {
+  background-color: var(--secondary);
+  border-color: var(--secondary);
+}
+
 /* Participants list */
 .participants-list {
   margin-top: 8px;
