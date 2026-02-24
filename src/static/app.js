@@ -491,13 +491,13 @@ document.addEventListener("DOMContentLoaded", () => {
     
     return `
       <div class="share-buttons">
-        <button class="share-btn twitter-share" data-activity="${escapedName}" title="Share on Twitter">
+        <button class="share-btn" data-platform="twitter" data-activity="${escapedName}" title="Share on Twitter" aria-label="Share on Twitter">
           <span class="share-icon">🐦</span>
         </button>
-        <button class="share-btn facebook-share" data-activity="${escapedName}" title="Share on Facebook">
+        <button class="share-btn" data-platform="facebook" data-activity="${escapedName}" title="Share on Facebook" aria-label="Share on Facebook">
           <span class="share-icon">📘</span>
         </button>
-        <button class="share-btn email-share" data-activity="${escapedName}" title="Share via Email">
+        <button class="share-btn" data-platform="email" data-activity="${escapedName}" title="Share via Email" aria-label="Share via Email">
           <span class="share-icon">✉️</span>
         </button>
       </div>
@@ -528,6 +528,10 @@ document.addEventListener("DOMContentLoaded", () => {
         url = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         window.location.href = url;
         break;
+      
+      default:
+        console.error(`Unknown sharing platform: ${platform}`);
+        return;
     }
   }
 
@@ -655,14 +659,7 @@ document.addEventListener("DOMContentLoaded", () => {
     shareButtons.forEach((button) => {
       button.addEventListener("click", (e) => {
         e.preventDefault();
-        let platform;
-        if (button.classList.contains("twitter-share")) {
-          platform = "twitter";
-        } else if (button.classList.contains("facebook-share")) {
-          platform = "facebook";
-        } else if (button.classList.contains("email-share")) {
-          platform = "email";
-        }
+        const platform = button.dataset.platform;
         shareActivity(platform, name, details);
       });
     });
