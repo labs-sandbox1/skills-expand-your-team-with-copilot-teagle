@@ -472,11 +472,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Helper function to escape HTML for use in attributes
+  // Helper function to escape HTML for use in attributes (reusable element)
+  const escapeHtmlElement = document.createElement('div');
   function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+    escapeHtmlElement.textContent = text;
+    return escapeHtmlElement.innerHTML;
   }
 
   // Helper function to create share text for an activity
@@ -487,17 +487,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Function to create share buttons for an activity
   function createShareButtons(name, details) {
-    const escapedName = escapeHtml(name);
-    
     return `
       <div class="share-buttons">
-        <button class="share-btn" data-platform="twitter" data-activity="${escapedName}" title="Share on Twitter" aria-label="Share on Twitter">
+        <button class="share-btn" data-platform="twitter" title="Share on Twitter" aria-label="Share on Twitter">
           <span class="share-icon">🐦</span>
         </button>
-        <button class="share-btn" data-platform="facebook" data-activity="${escapedName}" title="Share on Facebook" aria-label="Share on Facebook">
+        <button class="share-btn" data-platform="facebook" title="Share on Facebook" aria-label="Share on Facebook">
           <span class="share-icon">📘</span>
         </button>
-        <button class="share-btn" data-platform="email" data-activity="${escapedName}" title="Share via Email" aria-label="Share via Email">
+        <button class="share-btn" data-platform="email" title="Share via Email" aria-label="Share via Email">
           <span class="share-icon">✉️</span>
         </button>
       </div>
