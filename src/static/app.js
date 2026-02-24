@@ -472,26 +472,32 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Helper function to escape HTML for use in attributes
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // Helper function to create share text for an activity
+  function createShareText(name, details) {
+    const formattedSchedule = formatSchedule(details);
+    return `Check out ${name} at Mergington High School! ${details.description} - ${formattedSchedule}`;
+  }
+
   // Function to create share buttons for an activity
   function createShareButtons(name, details) {
-    const formattedSchedule = formatSchedule(details);
-    const shareText = `Check out ${name} at Mergington High School! ${details.description} - ${formattedSchedule}`;
-    const shareUrl = window.location.href;
-    
-    // URL encode the text and URL
-    const encodedText = encodeURIComponent(shareText);
-    const encodedUrl = encodeURIComponent(shareUrl);
-    const encodedName = encodeURIComponent(name);
+    const escapedName = escapeHtml(name);
     
     return `
       <div class="share-buttons">
-        <button class="share-btn twitter-share" data-activity="${name}" title="Share on Twitter">
+        <button class="share-btn twitter-share" data-activity="${escapedName}" title="Share on Twitter">
           <span class="share-icon">🐦</span>
         </button>
-        <button class="share-btn facebook-share" data-activity="${name}" title="Share on Facebook">
+        <button class="share-btn facebook-share" data-activity="${escapedName}" title="Share on Facebook">
           <span class="share-icon">📘</span>
         </button>
-        <button class="share-btn email-share" data-activity="${name}" title="Share via Email">
+        <button class="share-btn email-share" data-activity="${escapedName}" title="Share via Email">
           <span class="share-icon">✉️</span>
         </button>
       </div>
@@ -500,8 +506,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Function to handle social sharing
   function shareActivity(platform, activityName, details) {
-    const formattedSchedule = formatSchedule(details);
-    const shareText = `Check out ${activityName} at Mergington High School! ${details.description} - ${formattedSchedule}`;
+    const shareText = createShareText(activityName, details);
     const shareUrl = window.location.href;
     
     let url;
