@@ -472,13 +472,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Helper function to escape HTML for use in attributes (reusable element)
-  const escapeHtmlElement = document.createElement('div');
-  function escapeHtml(text) {
-    escapeHtmlElement.textContent = text;
-    return escapeHtmlElement.innerHTML;
-  }
-
   // Helper function to create share text for an activity
   function createShareText(name, details) {
     const formattedSchedule = formatSchedule(details);
